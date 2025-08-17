@@ -2,9 +2,16 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware(async (auth, req) => {
-  // protect /dashboard and its subpaths
-  if (req.nextUrl.pathname.startsWith("/dashboard")) {
-    const { userId, redirectToSignIn } = await auth(); // v5 requires await
+  const { userId, redirectToSignIn } = await auth();
+  const path = req.nextUrl.pathname;
+
+  // 1) If you're signed in and hit the homepage, go to /dashboard
+  if (userId && path === "/") {
+    return Response.redirect(new URL("/dashboard", req.url));
+  }
+
+  // 2) Protect /dashboard (and subpaths)
+  if (path.startsWith("/dashboard")) {
     if (!userId) {
       return redirectToSignIn({ returnBackUrl: req.url });
     }

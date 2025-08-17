@@ -31,6 +31,9 @@ export function SiteNavbar() {
             <Button asChild variant="outline">
               <Link href="/sign-in">Sign in</Link>
             </Button>
+            <Button asChild>
+              <Link href="/sign-up">Sign up</Link>
+            </Button>
           </SignedOut>
 
           <SignedIn>
